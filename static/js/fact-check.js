@@ -1,6 +1,18 @@
+var strings = [
+    "Parsing frame-semantics...",
+    "Finding congress member...",
+    "Checking bills...",
+    "Collecting votes...",
+    "Comparing votes with claim..."
+];
+
+var index = 0;
+var intervalId = null;
+
 function submitForm() {
     $('#results-container').empty();
     $('#loader').show();
+    cycleLoading();
 
     const userInput = document.getElementById("input-text").value;
     if (userInput === "") {
@@ -82,4 +94,32 @@ function toggleSummary(e) {
     } else {
         $(e).text('Show more');
     }
+}
+
+function cycleLoading() {
+    // Reset the index
+    index = 0;
+    $("#loading-text").text("Loading...");
+
+    // Clear the interval if it's already running
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+    }
+    
+    // Start a new interval
+    intervalId = setInterval(function() {
+        // Update the text of the div
+        $("#loading-text").text(strings[index]);
+
+        // Move to the next index
+        index++;
+
+        // Stop when all strings have been shown
+        if (index >= strings.length) {
+            clearInterval(intervalId);  // Stop the interval
+            intervalId = null;  // Reset intervalId
+            index = 0;  // Reset index
+        }
+    }, 1000);  // Change text every 1 second   
 }
